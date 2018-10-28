@@ -21,12 +21,16 @@ class BERTEmbedding(nn.Module):
         :param dropout: dropout rate
         """
         super().__init__()
-        self.token = TokenEmbedding(vocab_size=vocab_size, embed_size=embed_size)
+        # self.token = TokenEmbedding(vocab_size=vocab_size, embed_size=embed_size)
+        self.token = nn.Embedding(vocab_size, embed_size, padding_idx=0)
         self.position = PositionalEmbedding(d_model=self.token.embedding_dim)
         self.segment = SegmentEmbedding(embed_size=self.token.embedding_dim)
         self.dropout = nn.Dropout(p=dropout)
         self.embed_size = embed_size
 
     def forward(self, sequence, segment_label):
-        x = self.token(sequence) + self.position(sequence) + self.segment(segment_label)
+        print("Shape of BERT embedding input:{0}".format(sequence.shape))
+        # x = self.token(sequence) + self.position(sequence) + self.segment(segment_label)
+        x = self.token(sequence)
+        print("Shape of BERT embedding output:{0}".format(x.shape))
         return self.dropout(x)

@@ -15,4 +15,5 @@ class SublayerConnection(nn.Module):
 
     def forward(self, x, sublayer):
         "Apply residual connection to any sublayer with the same size."
+        # 这里的实现逻辑是错误的, paper中的NormLayer是针对输出进行的
         return x + self.dropout(sublayer(self.norm(x)))

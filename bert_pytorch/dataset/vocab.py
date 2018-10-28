@@ -114,6 +114,19 @@ class Vocab(TorchVocab):
         with open(vocab_path, "wb") as f:
             pickle.dump(self, f)
 
+    @staticmethod
+    def load_vocab_tx(vocab_path: str) -> 'vocab_dict':
+        word2id = {}
+        with open(vocab_path, "r") as f:
+            for line in f:
+                line = line.split()
+                if len(line) != 3:
+                    continue
+                #assert (len(line) == 3), "[ERROR] filed number of vocab_dict not equal 3!"
+                word = line[0]
+                id = int(line[1])
+                word2id[word] = id
+        return word2id
 
 # Building Vocab with text files
 class WordVocab(Vocab):
@@ -124,7 +137,7 @@ class WordVocab(Vocab):
             if isinstance(line, list):
                 words = line
             else:
-                words = line.replace("\n", "").replace("\t", "").split()
+                words = line.replace("\n", " ").replace("\t", " ").split()
 
             for word in words:
                 counter[word] += 1

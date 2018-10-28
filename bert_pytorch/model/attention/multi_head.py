@@ -13,6 +13,7 @@ class MultiHeadedAttention(nn.Module):
 
         # We assume d_v always equals d_k
         self.d_k = d_model // h
+        # h: attn_heads
         self.h = h
 
         self.linear_layers = nn.ModuleList([nn.Linear(d_model, d_model) for _ in range(3)])

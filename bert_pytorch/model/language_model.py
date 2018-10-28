@@ -20,9 +20,13 @@ class BERTLM(nn.Module):
         self.next_sentence = NextSentencePrediction(self.bert.hidden)
         self.mask_lm = MaskedLanguageModel(self.bert.hidden, vocab_size)
 
-    def forward(self, x, segment_label):
+    def forward(self, x, segment_label=None):
+        print("Shape of EBRTLM's input:{0}".format(x.shape))
         x = self.bert(x, segment_label)
-        return self.next_sentence(x), self.mask_lm(x)
+        x = self.mask_lm(x)
+        print("Shape of EBRTLM's output:{0}".format(x.shape))
+        #return self.next_sentence(x), self.mask_lm(x)
+        return x
 
 
 class NextSentencePrediction(nn.Module):
@@ -58,4 +62,7 @@ class MaskedLanguageModel(nn.Module):
         self.softmax = nn.LogSoftmax(dim=-1)
 
     def forward(self, x):
-        return self.softmax(self.linear(x))
+        print("Shape of MLM's input:{0}".format(x.shape))
+        x = self.softmax(self.linear(x))
+        print("Shape of MLM's output:{0}".format(x.shape))
+        return x
